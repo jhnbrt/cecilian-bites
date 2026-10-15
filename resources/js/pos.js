@@ -15,8 +15,6 @@ if (root) {
     const errorBox = root.querySelector('[data-cart-error]');
     const placeOrderButton = root.querySelector('[data-place-order]');
     const customerInput = root.querySelector('[data-customer]');
-    const tableSelect = root.querySelector('[data-table]');
-    const tableField = root.querySelector('[data-table-field]');
     const notesInput = root.querySelector('[data-notes]');
     const typeInputs = root.querySelectorAll('input[name="type"]');
 
@@ -27,7 +25,7 @@ if (root) {
         try {
             const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}');
             const entries = Object.values(stored).filter(
-                (item) => item && item.id && item.name && Number.isFinite(item.price) && item.qty > 0,
+                (item) => item && item.id && item.name && Number.isFinite(item.price) && Number.isInteger(item.qty) && item.qty > 0 && item.qty <= MAX_QUANTITY && item.price >= 0,
             );
 
             return Object.fromEntries(entries.map((item) => [item.id, item]));
@@ -91,6 +89,9 @@ if (root) {
 
                 row.dataset.id = item.id;
                 row.querySelector('[data-name]').textContent = item.name;
+                row.querySelector('[data-action=remove]').setAttribute('aria-label', `Remove ${item.name}`);
+                row.querySelector('[data-action=inc]').setAttribute('aria-label', `Add one ${item.name}`);
+                row.querySelector('[data-action=dec]').setAttribute('aria-label', `Remove one ${item.name}`);
                 row.querySelector('[data-qty]').textContent = item.qty;
                 row.querySelector('[data-line-total]').textContent = money(item.price * item.qty);
 
@@ -115,17 +116,8 @@ if (root) {
         errorBox.textContent = '';
     }
 
-    function syncTableField() {
-        const isDineIn = selectedType() === 'dine_in';
-
-        tableField.hidden = !isDineIn;
-
-        if (!isDineIn) {
-            tableSelect.value = '';
-        }
-    }
-
     async function placeOrder() {
+        if (isSubmitting) return;
         clearError();
 
         const items = Object.values(cart).map((item) => ({
@@ -147,7 +139,6 @@ if (root) {
                 body: JSON.stringify({
                     type: selectedType(),
                     customer_name: customerInput.value.trim(),
-                    dining_table_id: tableSelect.value || null,
                     notes: notesInput.value.trim() || null,
                     items,
                 }),
@@ -220,7 +211,6 @@ if (root) {
         }
     });
 
-    typeInputs.forEach((input) => input.addEventListener('change', syncTableField));
     placeOrderButton.addEventListener('click', placeOrder);
 
     root.querySelectorAll('[data-menu-item]').forEach((card) => {
@@ -231,6 +221,5 @@ if (root) {
         }
     });
 
-    syncTableField();
     render();
 }

@@ -53,6 +53,8 @@ class DashboardController extends Controller
 
         return view('Admin.dashboard', [
             'todaySales' => $todaySales,
+            'cashCollected' => Order::whereBetween('paid_at', [$todayStart, now()->endOfDay()])->whereNull('refunded_at')->sum('amount_paid'),
+            'unpaidTotal' => Order::whereNull('paid_at')->countedAsSales()->sum('total'),
             'todayOrders' => Order::query()->countedAsSales()->where('created_at', '>=', $todayStart)->count(),
             'activeOrders' => Order::query()->whereIn('status', OrderStatus::active())->count(),
             'availableDishes' => MenuItem::query()->available()->count(),

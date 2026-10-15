@@ -1,0 +1,12 @@
+/* Cecilian Bites: clean, scrollbar-free scrolling.
+   Scroll using wheel, touch, keyboard, or trackpad as normal. */
+html { scroll-behavior: smooth; }
+html, body, body * {
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* Legacy Edge */
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar, body *::-webkit-scrollbar {
+    display: none !important; /* Chrome, Edge, Safari */
+    width: 0 !important;
+    height: 0 !important;
+}

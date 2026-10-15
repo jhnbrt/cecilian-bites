@@ -8,6 +8,7 @@
         </a>
     </x-admin.page-title>
 
+    <div class="mb-5 grid gap-3 sm:grid-cols-2"><x-admin.stat label="Paid sales today" :value="$currency.number_format($cashCollected, 2)" hint="Cash, GCash and Maya, after discounts and refunds" /><x-admin.stat label="Unpaid order total" :value="$currency.number_format($unpaidTotal, 2)" hint="All non-canceled unpaid orders" /></div>
     <div class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_20rem]">
         <div class="min-w-0 space-y-5">
             <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">

@@ -29,8 +29,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'role' => ['required', Rule::enum(UserRole::class)],
-            'email' => ['required', 'string', 'email'],
+                        'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ];
     }
@@ -52,9 +51,9 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        $role = $this->enum('role', UserRole::class);
+        $role = Auth::user()->role;
 
-        if (Auth::user()->role !== $role) {
+        if (! $role instanceof UserRole) {
             Auth::logout();
 
             RateLimiter::hit($this->throttleKey());

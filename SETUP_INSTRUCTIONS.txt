@@ -1,0 +1,10 @@
+Cecilian Bites - Hidden Scrollbars Update
+
+1. Back up your project.
+2. Copy public/ and resources/ folders from this ZIP into your Laravel project, replacing only the matching layout files.
+3. Run: php artisan view:clear
+4. Hard-refresh browser (Ctrl + Shift + R).
+
+Scrolling stays functional; only scrollbar tracks/thumbs are hidden.
+Note: CSS cannot reliably show a scrollbar only during active scrolling in all browsers. This update hides it all the time.
+Source: cecilian-bites(5).zip. If your layout files changed since that ZIP, manually add the clean-scrollbars.css link before </head> rather than overwriting newer layout changes.

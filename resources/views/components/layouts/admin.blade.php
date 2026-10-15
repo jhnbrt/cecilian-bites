@@ -23,9 +23,9 @@
 
         <title>{{ $title ? $title.' · ' : '' }}Admin · {{ config('app.name') }}</title>
 
-        @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
+        <link rel="stylesheet" href="{{ asset('clean-scrollbars.css') }}">
+</head>
     <body class="min-h-screen bg-linear-to-br from-lime-700/60 via-slate-400 to-slate-500 p-3 font-sans text-neutral-900 antialiased sm:p-6">
         <div class="mx-auto flex max-w-[1500px] flex-col rounded-4xl bg-neutral-900 p-3 shadow-2xl lg:h-[calc(100vh-3rem)]">
             <header class="flex flex-wrap items-center gap-3 px-2 pb-3 pt-1 text-sm text-white">

@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['user_id', 'dining_table_id', 'customer_name', 'type', 'status', 'notes', 'total'])]
+#[Fillable(['user_id', 'dining_table_id', 'customer_name', 'type', 'status', 'notes', 'total', 'paid_at', 'paid_by', 'cash_received', 'payment_method', 'payment_reference', 'discount', 'amount_paid', 'refunded_at', 'refunded_by', 'refund_reason', 'canceled_at'])]
 class Order extends Model
 {
     /** @use HasFactory<OrderFactory> */
@@ -31,6 +31,9 @@ class Order extends Model
             'type' => OrderType::class,
             'status' => OrderStatus::class,
             'total' => 'decimal:2',
+            'paid_at' => 'datetime',
+            'cash_received' => 'decimal:2',
+            'discount' => 'decimal:2', 'amount_paid' => 'decimal:2', 'refunded_at' => 'datetime', 'canceled_at' => 'datetime',
         ];
     }
 

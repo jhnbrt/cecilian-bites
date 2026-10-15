@@ -36,7 +36,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="border-t border-neutral-200">
-                        <td colspan="3" class="pt-3 text-right text-neutral-600">Total payment</td>
+                        <td colspan="3" class="pt-3 text-right text-neutral-600">Order total</td>
                         <td class="pt-3 text-right text-base font-semibold">{{ $currency }}{{ number_format($order->total, 2) }}</td>
                     </tr>
                 </tfoot>
@@ -51,6 +51,7 @@
 
         <aside class="space-y-3 self-start rounded-3xl bg-violet-200 p-4 text-sm">
             <h2 class="text-lg font-semibold">Details</h2>
+            <a href="{{ route('orders.payment', $order) }}" class="block rounded-full bg-white px-4 py-3 text-center font-medium">{{ $order->paid_at ? 'Paid · View receipt' : 'Unpaid · Collect cash' }}</a>
 
             <dl class="space-y-2 rounded-2xl bg-white/70 p-4">
                 <div class="flex justify-between gap-3"><dt class="text-neutral-500">Status</dt><dd><x-admin.status-badge :status="$order->status" /></dd></div>

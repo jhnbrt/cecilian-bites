@@ -15,6 +15,11 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function incoming(Request $request): View
+    {
+        return $this->index($request)->with('incomingMode', true);
+    }
+
     public function index(Request $request): View
     {
         $type = OrderType::tryFrom((string) $request->query('type'));
@@ -55,6 +60,7 @@ class DashboardController extends Controller
             ->pluck('dining_table_id');
 
         return view('Cashier.dashboard', [
+            'incomingMode' => false,
             'type' => $type,
             'search' => $search,
             'categories' => $categories,

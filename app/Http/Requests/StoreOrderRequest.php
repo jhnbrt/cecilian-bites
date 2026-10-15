@@ -30,7 +30,7 @@ class StoreOrderRequest extends FormRequest
             'type' => ['required', Rule::enum(OrderType::class)],
             'customer_name' => ['required', 'string', 'max:100'],
             'dining_table_id' => [
-                Rule::requiredIf(fn (): bool => $this->input('type') === OrderType::DineIn->value),
+                'sometimes',
                 'nullable',
                 Rule::exists('dining_tables', 'id'),
                 function (string $attribute, mixed $value, Closure $fail): void {
@@ -65,7 +65,6 @@ class StoreOrderRequest extends FormRequest
             'items.required' => 'Add at least one dish to the order.',
             'items.min' => 'Add at least one dish to the order.',
             'items.*.menu_item_id.exists' => 'One of the selected dishes is no longer available.',
-            'dining_table_id.required' => 'Select a table for dine-in orders.',
         ];
     }
 }

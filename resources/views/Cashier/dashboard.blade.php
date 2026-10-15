@@ -12,20 +12,20 @@
     ], $overrides));
 @endphp
 
-<x-layouts.app title="Dashboard">
+<x-layouts.app :title="($incomingMode ?? false) ? 'Incoming Orders' : 'New Walk-in Order'">
     <div
         id="pos"
         class="contents"
         data-currency="{{ $currency }}"
         data-store-url="{{ route('orders.store') }}"
     >
-        <main class="flex min-h-0 flex-col gap-5 rounded-3xl bg-linear-to-br from-lime-200 via-lime-100 to-sky-200 p-5">
+        <main class="food-workspace flex min-h-0 flex-col gap-5 rounded-3xl bg-linear-to-br from-lime-200 via-lime-100 to-sky-200 p-5">
             @error('status')
                 <p class="rounded-2xl bg-rose-100 px-4 py-2 text-sm text-rose-700">
                     {{ $message }}
                 </p>
             @enderror
-
+            @if ($incomingMode ?? false)
             <section id="order-line" class="shrink-0">
                 <div class="flex flex-wrap items-center gap-3">
                     <h2 class="text-lg font-semibold">Order Line</h2>
@@ -37,13 +37,13 @@
                                 @endphp
 
                             <a
-                                href="{{ route('dashboard', $query(['type' => $case->value])) }}"
+                                href="{{ route('cashier.incoming', $query(['type' => $case->value])) }}"
                                 class="flex items-center gap-2 rounded-full px-4 py-1.5 {{ $isActive ? 'bg-violet-300 font-medium' : 'hover:bg-white/60' }}"
                             >
                                 {{ $case->label() }}
 
                                 @if ($isActive)
-                                    <span class="grid size-6 place-items-center rounded-full bg-white text-xs">
+                                    <span class="grid size-6 place-items-center rounded-full bg-white text-sm">
                                         {{ $orderCounts[$case->value] ?? 0 }}
                                     </span>
                                 @endif
@@ -52,7 +52,7 @@
                     </div>
 
                     <a
-                        href="{{ route('dashboard', $query(['type' => null])) }}"
+                        href="{{ route('cashier.incoming', $query(['type' => null])) }}"
                         class="ml-auto flex items-center gap-1 rounded-full px-4 py-1.5 text-sm {{ $type ? 'bg-white/50 hover:bg-white/80' : 'bg-violet-300 font-medium' }}"
                     >
                         All Orders ({{ $orderCounts->sum() }})
@@ -80,12 +80,12 @@
                                         {{ $order->customer_name }}
                                     </h3>
 
-                                    <span class="text-[11px] text-neutral-400">
+                                    <span class="text-sm text-neutral-400">
                                         #{{ $order->number }}
                                     </span>
                                 </div>
 
-                                <div class="mt-1 flex justify-between text-[11px] text-neutral-500">
+                                <div class="mt-1 flex justify-between text-sm text-neutral-500">
                                     <span>
                                         {{ (int) $order->items_count }}
                                         {{ Str::plural('Item', (int) $order->items_count) }}
@@ -97,11 +97,11 @@
                                 </div>
 
                                 <div class="mt-3 flex items-center gap-1.5">
-                                    <span class="truncate rounded-full bg-sky-100 px-2.5 py-1 text-[11px] font-medium">
+                                    <span class="truncate rounded-full bg-sky-100 px-2.5 py-1 text-sm font-medium">
                                         {{ $order->diningTable?->name ?? $order->type->label() }}
                                     </span>
 
-                                    @if ($next)
+                                    @if ($next && ! ($next === OrderStatus::Completed && ! $order->isPaid()))
                                         <form
                                             method="POST"
                                             action="{{ route('orders.status', $order) }}"
@@ -118,18 +118,18 @@
                                             <button
                                                 type="submit"
                                                 title="Mark as {{ $next->label() }}"
-                                                class="whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-medium hover:opacity-80 {{ $statusClasses }}"
+                                                class="whitespace-nowrap rounded-full px-2.5 py-1 text-sm font-medium hover:opacity-80 {{ $statusClasses }}"
                                             >
                                                 {{ $order->status->label() }}
                                             </button>
                                         </form>
                                     @else
-                                        <span class="whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-medium {{ $statusClasses }}">
+                                        <span class="whitespace-nowrap rounded-full px-2.5 py-1 text-sm font-medium {{ $statusClasses }}">
                                             {{ $order->status->label() }}
                                         </span>
                                     @endif
 
-                                    @unless ($order->status->isFinal())
+                                    @if (! $order->status->isFinal() && auth()->user()->isAdmin())
                                         <form
                                             method="POST"
                                             action="{{ route('orders.status', $order) }}"
@@ -154,8 +154,9 @@
                                                 <x-icon name="x" class="size-3" />
                                             </button>
                                         </form>
-                                    @endunless
+                                    @endif
                                 </div>
+                                <a href="{{ route('orders.payment', $order) }}" class="mt-3 block rounded-full bg-violet-100 px-3 py-1 text-center text-sm font-medium">{{ $order->paid_at ? 'Paid · Receipt' : 'Unpaid · Collect payment' }}</a>
                             </article>
                         @endforeach
                     @else
@@ -166,9 +167,10 @@
                 </div>
             </section>
 
+            @else
             <section id="menu" class="flex min-h-0 flex-1 flex-col">
                 <div class="flex items-center gap-3">
-                    <h2 class="shrink-0 text-lg font-semibold">Explore Menu</h2>
+                    <h2 class="shrink-0 text-lg font-semibold">Explore categories</h2>
 
                     <nav class="flex min-w-0 items-center gap-1 overflow-x-auto rounded-full bg-white/50 p-1 text-sm">
                         <a
@@ -178,7 +180,7 @@
                             All
 
                             @unless ($activeCategory)
-                                <span class="grid size-6 place-items-center rounded-full bg-white text-xs">
+                                <span class="grid size-6 place-items-center rounded-full bg-white text-sm">
                                     {{ $allItemsCount }}
                                 </span>
                             @endunless
@@ -196,7 +198,7 @@
                                 {{ $category->name }}
 
                                 @if ($isActive)
-                                    <span class="grid size-6 place-items-center rounded-full bg-white text-xs">
+                                    <span class="grid size-6 place-items-center rounded-full bg-white text-sm">
                                         {{ $category->menu_items_count }}
                                     </span>
                                 @endif
@@ -217,11 +219,11 @@
                     </p>
                 @endif
 
-                <div class="mt-4 grid min-h-0 flex-1 content-start gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3">
+                <div class="cashier-menu-grid mt-4 grid min-h-0 flex-1 content-start gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3">
                     @if ($menuItems->isNotEmpty())
                         @foreach ($menuItems as $item)
                             <article
-                                class="group flex gap-3 rounded-2xl bg-white p-2 shadow-sm"
+                                class="product-card group flex gap-3 rounded-2xl bg-white p-2 shadow-sm"
                                 data-menu-item
                                 data-id="{{ $item->id }}"
                                 data-name="{{ $item->name }}"
@@ -233,7 +235,7 @@
                                         src="{{ $item->image_url }}"
                                         alt="{{ $item->name }}"
                                         loading="lazy"
-                                        class="size-24 shrink-0 rounded-xl object-cover"
+                                        class="product-photo size-24 shrink-0 rounded-xl object-cover"
                                     >
                                 @else
                                     <div class="grid size-24 shrink-0 place-items-center rounded-xl bg-linear-to-br from-lime-200 to-violet-200 text-3xl font-semibold text-neutral-700">
@@ -241,9 +243,9 @@
                                     </div>
                                 @endif
 
-                                <div class="flex min-w-0 flex-1 flex-col justify-between py-1">
+                                <div class="product-copy flex min-w-0 flex-1 flex-col justify-between py-1">
                                     <div>
-                                        <div class="flex items-baseline justify-between gap-2 text-xs">
+                                        <div class="flex items-baseline justify-between gap-2 text-sm">
                                             <span class="truncate text-neutral-400">
                                                 {{ $item->category->name }}
                                             </span>
@@ -290,9 +292,9 @@
                                             type="button"
                                             data-action="add"
                                             aria-label="Add {{ $item->name }} to order"
-                                            class="grid size-8 place-items-center rounded-full bg-violet-300 hover:bg-violet-400 group-data-[active=true]:hidden"
+                                            class="order-now grid place-items-center rounded-full bg-violet-300 hover:bg-violet-400 group-data-[active=true]:hidden"
                                         >
-                                            <x-icon name="plus" class="size-4" />
+                                            Order now
                                         </button>
 
                                         <button
@@ -316,20 +318,20 @@
             </section>
         </main>
 
-        <aside class="flex min-h-0 flex-col gap-3 rounded-3xl bg-violet-200 p-4">
+        <aside class="invoice-panel flex min-h-0 flex-col gap-3 rounded-3xl bg-violet-200 p-4">
             <div class="flex items-center justify-between">
-                <h2 class="text-lg font-semibold">Order Details</h2>
+                <h2 class="text-lg font-semibold">Invoice</h2>
 
                 <button
                     type="button"
                     data-clear
-                    class="text-xs font-medium underline underline-offset-2"
+                    class="text-sm font-medium underline underline-offset-2"
                 >
                     Cancel
                 </button>
             </div>
 
-            <div class="flex rounded-full bg-white/60 p-1 text-xs">
+            <div class="flex rounded-full bg-white/60 p-1 text-sm">
                 @foreach (OrderType::cases() as $case)
                     <label class="flex-1 cursor-pointer rounded-full px-3 py-1.5 text-center font-medium has-[:checked]:bg-neutral-900 has-[:checked]:text-white">
                         <input
@@ -379,7 +381,7 @@
                 </div>
             </div>
 
-            <div class="flex items-center justify-between text-xs text-neutral-600">
+            <div class="flex items-center justify-between text-sm text-neutral-600">
                 <span class="font-medium">New order</span>
 
                 <span>
@@ -402,7 +404,7 @@
                 <button
                     type="button"
                     data-toggle-notes
-                    class="rounded-full bg-white/60 px-3 py-1.5 text-xs font-medium hover:bg-white/80"
+                    class="rounded-full bg-white/60 px-3 py-1.5 text-sm font-medium hover:bg-white/80"
                 >
                     + Cooking Request
                 </button>
@@ -419,7 +421,7 @@
             </div>
 
             <div class="flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3 text-sm">
-                <span>Total Payment</span>
+                <span>Order Total</span>
 
                 <span data-cart-total class="font-semibold">
                     {{ $currency }}0.00
@@ -430,7 +432,7 @@
                 data-cart-error
                 hidden
                 role="alert"
-                class="rounded-2xl bg-rose-100 px-4 py-2 text-xs text-rose-700"
+                class="rounded-2xl bg-rose-100 px-4 py-2 text-sm text-rose-700"
             ></p>
 
             <button
@@ -443,6 +445,20 @@
             </button>
         </aside>
 
-        {{-- Cart row template temporarily removed for debugging --}}
+        <template id="cart-row-template">
+            <li data-row class="relative rounded-2xl bg-white p-4 shadow-sm">
+                <button type="button" data-action="remove" aria-label="Remove item" class="absolute right-2 top-2 grid size-7 place-items-center rounded-full bg-violet-100 text-neutral-600">×</button>
+                <h3 data-name class="pr-7 text-sm font-semibold"></h3>
+                <div class="mt-3 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2">
+                        <button type="button" data-action="dec" aria-label="Decrease quantity" class="grid size-7 place-items-center rounded-full bg-neutral-900 text-white">−</button>
+                        <span data-qty class="min-w-4 text-center text-sm font-semibold"></span>
+                        <button type="button" data-action="inc" aria-label="Increase quantity" class="grid size-7 place-items-center rounded-full bg-neutral-900 text-white">+</button>
+                    </div>
+                    <span data-line-total class="rounded-full bg-sky-100 px-4 py-1 text-sm font-semibold"></span>
+                </div>
+            </li>
+        </template>
+        @endif
     </div>
 </x-layouts.app>

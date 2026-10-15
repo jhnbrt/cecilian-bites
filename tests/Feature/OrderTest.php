@@ -119,6 +119,8 @@ test('an order moves from in progress to ready to serve to completed', function 
     $this->patch(route('orders.status', $order), ['status' => 'ready_to_serve'])->assertRedirect();
     expect($order->refresh()->status)->toBe(OrderStatus::ReadyToServe);
 
+    $order->update(['paid_at' => now()]);
+
     $this->patch(route('orders.status', $order), ['status' => 'completed'])->assertRedirect();
     expect($order->refresh()->status)->toBe(OrderStatus::Completed);
 });

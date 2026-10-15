@@ -11,7 +11,21 @@ return [
     |
     */
 
-    'currency' => env('RESTAURANT_CURRENCY', '$'),
+    'currency' => env('RESTAURANT_CURRENCY', '₱'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Receipt Details
+    |--------------------------------------------------------------------------
+    |
+    | Shown at the top and bottom of every printed receipt.
+    |
+    */
+
+    'name' => env('RESTAURANT_NAME', 'Cecilian Bites'),
+    'address' => env('RESTAURANT_ADDRESS'),
+    'phone' => env('RESTAURANT_PHONE'),
+    'receipt_footer' => env('RESTAURANT_RECEIPT_FOOTER', 'Thank you for dining with us!'),
 
     /*
     |--------------------------------------------------------------------------
@@ -26,5 +40,6 @@ return [
     */
 
     'admin_registration_code' => env('ADMIN_REGISTRATION_CODE'),
+    'public_staff_registration' => env('PUBLIC_STAFF_REGISTRATION', false),
 
 ];

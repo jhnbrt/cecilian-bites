@@ -15,7 +15,7 @@ class LoginController extends Controller
     public function create(Request $request): View
     {
         return view('auth.login', [
-            'role' => UserRole::tryFrom((string) $request->query('role')) ?? UserRole::Cashier,
+            'role' => UserRole::Customer,
         ]);
     }
 

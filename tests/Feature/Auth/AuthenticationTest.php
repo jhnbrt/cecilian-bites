@@ -1,5 +1,7 @@
 <?php
 
+beforeEach(function () { config(['restaurant.public_staff_registration' => true]); });
+
 use App\Enums\UserRole;
 use App\Models\User;
 

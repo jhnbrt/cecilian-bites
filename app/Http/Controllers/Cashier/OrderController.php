@@ -30,7 +30,7 @@ class OrderController extends Controller
         $order = DB::transaction(function () use ($request, $type, $lines, $menuItems): Order {
             $order = Order::create([
                 'user_id' => $request->user()->id,
-                'dining_table_id' => $type === OrderType::DineIn ? $request->validated('dining_table_id') : null,
+                'dining_table_id' => null,
                 'customer_name' => $request->validated('customer_name'),
                 'type' => $type,
                 'status' => OrderStatus::InProgress,
@@ -68,14 +68,22 @@ class OrderController extends Controller
     public function updateStatus(UpdateOrderStatusRequest $request, Order $order): RedirectResponse
     {
         $status = $request->enum('status', OrderStatus::class);
+        if ($status === OrderStatus::Canceled) { abort_unless($request->user()->isAdmin(), 403); }
 
-        if (! $order->status->canTransitionTo($status)) {
-            return back()->withErrors([
-                'status' => 'Order #'.$order->number.' cannot move from '.$order->status->label().' to '.$status->label().'.',
-            ]);
+        $message = DB::transaction(function () use ($order, $status): ?string {
+            $locked = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
+            if ($locked->paid_at && $status === OrderStatus::Canceled) {
+                return 'A paid order cannot be canceled without a refund workflow.';
+            }
+            if (! $locked->status->canTransitionTo($status)) {
+                return 'Order #'.$locked->number.' cannot move from '.$locked->status->label().' to '.$status->label().'.';
+            }
+            $locked->update(['status' => $status, 'canceled_at' => $status === OrderStatus::Canceled ? now() : $locked->canceled_at]);
+            return null;
+        });
+        if ($message) {
+            return back()->withErrors(['status' => $message]);
         }
-
-        $order->update(['status' => $status]);
 
         return back();
     }
