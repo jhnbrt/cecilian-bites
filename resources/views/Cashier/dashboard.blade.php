@@ -170,7 +170,7 @@
             @else
             <section id="menu" class="flex min-h-0 flex-1 flex-col">
                 <div class="flex items-center gap-3">
-                    <h2 class="shrink-0 text-lg font-semibold">Explore categories</h2>
+                    <h2 class="shrink-0 text-lg font-semibold">Explore Categories</h2>
 
                     <nav class="flex min-w-0 items-center gap-1 overflow-x-auto rounded-full bg-white/50 p-1 text-sm">
                         <a
@@ -331,9 +331,9 @@
                 </button>
             </div>
 
-            <div class="flex rounded-full bg-white/60 p-1 text-sm">
+            <div class="grid grid-cols-3 gap-1 rounded-xl bg-white/80 p-1 text-sm" role="radiogroup" aria-label="Order type">
                 @foreach (OrderType::cases() as $case)
-                    <label class="flex-1 cursor-pointer rounded-full px-3 py-1.5 text-center font-medium has-[:checked]:bg-neutral-900 has-[:checked]:text-white">
+                    <label class="flex min-h-11 min-w-0 cursor-pointer items-center justify-center rounded-lg px-1.5 py-2 text-center text-xs font-semibold leading-tight text-slate-700 transition-colors sm:text-sm has-[:checked]:bg-[#F25532] has-[:checked]:text-white has-[:checked]:shadow-sm focus-within:ring-2 focus-within:ring-orange-300">
                         <input
                             type="radio"
                             name="type"
@@ -341,8 +341,7 @@
                             class="sr-only"
                             @checked($loop->first)
                         >
-
-                        {{ $case->label() }}
+                        <span>{{ $case->label() }}</span>
                     </label>
                 @endforeach
             </div>
@@ -357,28 +356,7 @@
                     class="w-full rounded-2xl border-0 bg-white/60 px-4 py-3 text-sm placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-violet-400"
                 >
 
-                <div data-table-field>
-                    <select
-                        data-table
-                        aria-label="Table"
-                        class="w-full rounded-2xl border-0 bg-white/60 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400"
-                    >
-                        <option value="">Select Table</option>
 
-                        @foreach ($tables as $table)
-                            @php
-                                $isOccupied = $occupiedTableIds->contains($table->id);
-                            @endphp
-
-                            <option
-                                value="{{ $table->id }}"
-                                @disabled($isOccupied)
-                            >
-                                {{ $table->name }} · {{ $table->seats }} seats{{ $isOccupied ? ' (occupied)' : '' }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
             </div>
 
             <div class="flex items-center justify-between text-sm text-neutral-600">
@@ -421,7 +399,7 @@
             </div>
 
             <div class="flex items-center justify-between rounded-2xl bg-white/60 px-4 py-3 text-sm">
-                <span>Order Total</span>
+                <span>Total Payment</span>
 
                 <span data-cart-total class="font-semibold">
                     {{ $currency }}0.00
@@ -441,7 +419,7 @@
                 disabled
                 class="w-full rounded-full bg-neutral-900 py-3 text-sm font-semibold text-white transition hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-40"
             >
-                Place Order
+                Place Order Now
             </button>
         </aside>
 

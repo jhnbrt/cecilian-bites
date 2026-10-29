@@ -1,0 +1,19 @@
+
+/* Shared cashier/admin account dropdown */
+.profile-dropdown{position:relative;z-index:60;font-family:inherit;color:#202938;font-size:14px}
+.profile-dropdown summary{display:flex;align-items:center;gap:10px;cursor:pointer;list-style:none;border:1px solid #e5e7eb;background:#fff;border-radius:12px;padding:7px 11px;min-height:44px;box-shadow:0 1px 3px #1018280a}
+.profile-dropdown summary::-webkit-details-marker{display:none}
+.profile-dropdown summary::marker{content:""}
+.profile-dropdown summary:hover{background:#fafafa;border-color:#d1d5db}
+.profile-dropdown .profile-avatar{display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:50%;background:#fff0e9;color:#df542e;font-weight:700}
+.profile-dropdown .profile-trigger-name{font-weight:600;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.profile-dropdown .profile-chevron{font-size:18px;color:#64748b;transition:transform .15s}
+.profile-dropdown[open] .profile-chevron{transform:rotate(180deg)}
+.profile-dropdown>.profile-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:100;width:240px;min-width:0;padding:12px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 14px 35px #10182820;color:#202938}
+.profile-dropdown .profile-identity{display:flex;align-items:center;gap:10px;padding:5px 4px 13px;border-bottom:1px solid #edf0f2}
+.profile-dropdown .profile-identity-text{display:flex;flex-direction:column;min-width:0;line-height:1.45}
+.profile-dropdown .profile-identity-text strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+.profile-dropdown .profile-identity-text small{color:#64748b;font-size:12px}
+.profile-dropdown .profile-menu form{margin:8px 0 0}
+.profile-dropdown .profile-menu .profile-logout{display:block;width:100%;text-align:left;background:transparent;border:0;border-radius:9px;padding:10px 12px;color:#d94d2b;font-size:14px;font-weight:600;cursor:pointer}
+.profile-dropdown .profile-menu .profile-logout:hover{background:#fff1eb}

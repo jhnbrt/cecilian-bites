@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders/{order}/receipt', [\App\Http\Controllers\Cashier\PaymentController::class, 'receipt'])->name('orders.receipt');
         Route::post('/orders/{order}/payment', [\App\Http\Controllers\Cashier\PaymentController::class, 'store'])->name('orders.payment.store');
         Route::get('/cashier/transactions', [\App\Http\Controllers\Cashier\TransactionController::class, 'index'])->name('cashier.transactions');
+        Route::get('/cashier/payment-records', [\App\Http\Controllers\Cashier\TransactionController::class, 'paymentRecords'])->name('cashier.payment-records');
 
         Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
         Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');

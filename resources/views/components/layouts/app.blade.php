@@ -14,6 +14,7 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <link rel="stylesheet" href="{{ asset('clean-scrollbars.css') }}">
+    <link rel="stylesheet" href="{{ asset('profile-dropdown.css') }}">
 </head>
     <body class="cashier-body font-sans text-neutral-900 antialiased">
         <div class="cashier-shell">
@@ -24,19 +25,18 @@
                     <a href="{{ route('dashboard') }}#menu" data-target="menu"><span class="nav-symbol">＋</span> New walk-in order</a>
                     <a href="{{ route('cashier.incoming') }}#order-line" class="{{ request()->routeIs('cashier.incoming') ? 'selected' : '' }}" data-target="order-line"><span class="nav-symbol">▤</span> Incoming orders</a>
                     <a href="{{ route('cashier.transactions') }}" class="{{ request()->routeIs('cashier.transactions') ? 'selected' : '' }}"><span class="nav-symbol">◷</span> Transactions & sales</a>
-                    <a href="{{ route('cashier.transactions') }}" ><span class="nav-symbol">₱</span> Payment records</a>
+                    <a href="{{ route('cashier.payment-records') }}" class="{{ request()->routeIs('cashier.payment-records') ? 'selected' : '' }}"><span class="nav-symbol">₱</span> Payment records</a>
                     @if(auth()->user()->isAdmin())<a href="{{ route('admin.dashboard') }}"><span class="nav-symbol">⚙</span> Admin management</a>@endif
-                    <a href="{{ route('home') }}"><span class="nav-symbol">↗</span> Customer website</a>
                 </nav>
-                <div class="sidebar-note"><h3>Take an order</h3><p>Choose dishes, enter customer details, and place the order. Collect cash, GCash, or Maya payments from the order queue.</p></div>
+                <div class="sidebar-note"><h3>Cashier workspace</h3><p>Manage walk-in orders, incoming requests and payments in one place.</p></div>
             </aside>
             <div class="staff-content">
                 <header class="staff-topbar">
                     <form method="GET" action="{{ route('dashboard') }}" class="staff-search">
                         @foreach(['type', 'category'] as $filter) @if(request()->filled($filter))<input type="hidden" name="{{ $filter }}" value="{{ request($filter) }}">@endif @endforeach
-                        <input type="search" name="q" value="{{ request('q') }}" aria-label="Search food" placeholder="Search food"><button type="submit">Search</button>
+                        <input type="search" name="q" value="{{ request('q') }}" aria-label="Search food" placeholder="Search food"><button type="submit">Filter ⛃</button>
                     </form>
-                    <details class="staff-account"><summary>{{ auth()->user()->name }} ▾</summary><div><p>{{ auth()->user()->role->label() }}</p><form method="POST" action="{{ route('logout') }}">@csrf<button>Log out</button></form></div></details>
+                    <details class="staff-account profile-dropdown"><summary><span class="profile-avatar">{{ Str::upper(Str::substr(auth()->user()->name, 0, 1)) }}</span><span class="profile-trigger-name">{{ auth()->user()->name }}</span><span class="profile-chevron" aria-hidden="true">⌄</span></summary><div class="profile-menu"><div class="profile-identity"><span class="profile-avatar">{{ Str::upper(Str::substr(auth()->user()->name, 0, 1)) }}</span><div class="profile-identity-text"><strong>{{ auth()->user()->name }}</strong><small>{{ auth()->user()->role->label() }}</small></div></div><form method="POST" action="{{ route('logout') }}">@csrf<button type="submit" class="profile-logout">↪ &nbsp; Log out</button></form></div></details>
                 </header>
                 <div class="cashier-workspace">{{ $slot }}</div>
             </div>

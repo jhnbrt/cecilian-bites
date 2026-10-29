@@ -27,3 +27,108 @@
 @media(min-width:1700px){#order-line .incoming-orders-grid{grid-template-columns:repeat(4,minmax(0,1fr));}}
 @media(max-width:1150px){#order-line .incoming-orders-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:700px){#order-line .incoming-orders-grid{grid-template-columns:1fr;}}
+
+/* Professional cashier refinement — non-destructive visual layer */
+body.cashier-body{background:#f6f7fb;color:#202638;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.cashier-shell{max-width:none;background:#f6f7fb;grid-template-columns:244px minmax(0,1fr)}
+.staff-sidebar{background:#fff;border-right:1px solid #e8eaf0;padding:26px 16px;box-shadow:none}
+.side-brand{font-size:19px;letter-spacing:-.5px;color:#c74d2c;padding-bottom:23px}
+.staff-sidebar nav a{font-size:13.5px;color:#576071;min-height:47px;border-radius:10px}
+.staff-sidebar nav a.selected{background:#fff1ea;color:#bc4527;border-color:#f9dfd2;box-shadow:inset 3px 0 #d95a34}
+.sidebar-note{border:1px solid #e9ebf1;background:#fafbfc}
+.staff-topbar{padding:17px 28px;min-height:76px;border-bottom:1px solid #e8eaf0}
+.staff-search input{border:1px solid #e5e8ef;background:#f8f9fc;border-radius:10px;min-height:43px}
+.staff-search input:focus{outline:2px solid #f4b29a;outline-offset:1px}
+.staff-search button,.staff-account button{background:#d95732;border-radius:10px;font-weight:650}
+.cashier-workspace{gap:22px;padding:26px;overflow:auto}
+#pos>.invoice-panel{border:1px solid #e8eaf0;box-shadow:0 6px 22px #1e293b08;border-radius:17px;padding:23px}
+#pos>.food-workspace{gap:24px}
+#pos h2{font-size:19px;font-weight:750;letter-spacing:-.4px;color:#202638}
+#pos #menu nav a{border:1px solid #e8eaf0;min-height:43px;padding:10px 16px;box-shadow:0 2px 6px #1e293b05;font-weight:600}
+#pos #menu nav a.bg-violet-300{background:#d95732;color:#fff;border-color:#d95732}
+#pos .cashier-menu-grid{gap:17px}
+#pos [data-menu-item]{border:1px solid #e8eaf0;border-radius:15px;padding:14px;box-shadow:0 3px 12px #1e293b08;transition:transform .16s,box-shadow .16s,border-color .16s}
+#pos [data-menu-item]:hover{transform:translateY(-2px);border-color:#e6ad97;box-shadow:0 10px 24px #1e293b12}
+#pos [data-menu-item][data-active=true]{border-color:#d95732;box-shadow:0 0 0 2px #fce6dd}
+#pos [data-menu-item] .product-photo{object-fit:cover}
+#order-line .incoming-orders-grid{gap:16px}
+#order-line .incoming-order-card{border:1px solid #e8eaf0!important;border-radius:16px;box-shadow:0 4px 16px #1e293b09;transition:box-shadow .15s}
+#order-line .incoming-order-card:hover{box-shadow:0 10px 25px #1e293b12}
+#pos button,#pos a,.staff-sidebar a{transition:background-color .15s,border-color .15s,color .15s,box-shadow .15s}
+#pos button:focus-visible,#pos a:focus-visible,.staff-sidebar a:focus-visible{outline:3px solid #f0a68a;outline-offset:2px}
+@media(max-width:1200px){.cashier-shell{grid-template-columns:205px minmax(0,1fr)}.cashier-workspace{padding:18px}#pos .cashier-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:950px){.cashier-shell{display:block;height:auto;min-height:100vh}.staff-sidebar{height:auto;position:relative;padding:16px}.staff-sidebar nav{flex-direction:row;overflow-x:auto}.staff-sidebar nav a{white-space:nowrap}.cashier-workspace{min-height:calc(100vh - 160px)}}
+@media(max-width:600px){.staff-topbar{padding:14px}.cashier-workspace{padding:12px}#pos .cashier-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#pos [data-menu-item]{padding:10px}#pos>.invoice-panel{padding:15px}}
+@media(max-width:380px){#pos .cashier-menu-grid{grid-template-columns:1fr}}
+
+/* Reference-inspired cashier ordering screen (2026-10) */
+:root{--pos-accent:#ee613f;--pos-border:#e8eaf0;--pos-bg:#f3f4f7}
+body.cashier-body,.cashier-shell{background:var(--pos-bg)}
+.cashier-shell{grid-template-columns:190px minmax(0,1fr)}
+.staff-sidebar{padding:22px 13px;gap:18px}
+.side-brand{font-size:17px;white-space:nowrap;padding:3px 2px 19px}
+.side-brand span{color:var(--pos-accent);font-size:28px}
+.staff-sidebar nav{gap:8px}
+.staff-sidebar nav a{border:1px solid var(--pos-border);background:#fff;min-height:43px;padding:10px 11px;font-size:12px;box-shadow:0 2px 5px #161b2a08}
+.staff-sidebar nav a.selected{background:#fff0eb;border:1px solid #eeb39f;color:#bd4b2d;box-shadow:none}
+.nav-symbol{font-size:17px;width:19px}
+.staff-topbar{min-height:70px;padding:13px 20px}
+.staff-search{width:min(490px,70%)}
+.staff-search input{background:#f8f9fb;min-height:40px}
+.staff-search button{background:var(--pos-accent);font-weight:600}
+.cashier-workspace{padding:15px;gap:14px;grid-template-columns:minmax(0,1fr) 270px}
+#pos{min-width:0}
+#pos>.food-workspace{gap:20px;overflow-y:auto;scrollbar-width:none}
+#pos>.food-workspace::-webkit-scrollbar,#pos>.invoice-panel::-webkit-scrollbar{display:none}
+#pos #menu>div:first-child{display:block}
+#pos #menu h2{font-size:15px;font-weight:700;color:#343b49}
+#pos #menu nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:13px}
+#pos #menu nav a{min-height:57px;display:flex;justify-content:center;align-items:center;padding:10px 7px;text-align:center;font-size:12px;font-weight:600;border:1px solid #e9ebef;box-shadow:0 1px 3px #12192c08}
+#pos #menu nav a.bg-violet-300{background:#fff0ea;border-color:#e8a18c;color:#b94627}
+#pos .cashier-menu-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:20px}
+#pos [data-menu-item]{padding:12px;border:1px solid #e7e8ec;border-radius:11px;gap:9px;box-shadow:0 2px 5px #161b2a08}
+#pos [data-menu-item][data-active=true]{border-color:var(--pos-accent);box-shadow:0 0 0 1px #f5c2b4}
+#pos [data-menu-item] .product-photo,#pos [data-menu-item]>div:first-child{height:132px;background:#f2f3f6;object-fit:contain}
+#pos [data-menu-item] h3{font-size:13px;font-weight:700}
+#pos [data-menu-item] .product-copy{gap:12px;min-height:95px}
+#pos [data-menu-item] .product-copy>div:first-child>div>span:last-child{font-size:17px;font-weight:800;color:#d95030}
+#pos [data-menu-item] .product-copy>div:last-child{gap:5px}
+#pos .order-now{background:var(--pos-accent);font-size:11px;padding:7px 9px;height:32px}
+#pos [data-menu-item] [data-action=inc],#pos [data-menu-item] [data-action=dec]{height:23px;width:23px}
+#pos>.invoice-panel{border-radius:13px;border:1px solid #eef0f3;padding:17px 14px;gap:14px;scrollbar-width:none}
+#pos>.invoice-panel h2{font-size:16px;font-weight:750}
+#pos [data-row]{background:#fff;border-bottom:1px solid #eceef1;border-radius:7px;padding:12px 8px}
+#pos [data-cart-empty]{background:#f8f9fb;border:1px dashed #d8dce5;border-radius:10px}
+#pos [data-place-order]{background:var(--pos-accent);border-radius:7px;min-height:43px;font-weight:700}
+#pos [data-customer],#pos [data-notes]{background:#f8f9fb}
+#pos .invoice-panel>div:nth-last-of-type(1){border:1px dashed #d9dde5;background:#fafbfc}
+@media(min-width:1500px){.cashier-workspace{grid-template-columns:minmax(0,1fr) 305px}#pos #menu nav{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:1120px){.cashier-shell{grid-template-columns:165px minmax(0,1fr)}.cashier-workspace{grid-template-columns:minmax(0,1fr) 255px}#pos .cashier-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#pos #menu nav{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:850px){.cashier-workspace{grid-template-columns:1fr}#pos>.invoice-panel{min-height:350px}#pos .cashier-menu-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:620px){.cashier-shell{display:block}.staff-sidebar{height:auto;padding:12px}.staff-sidebar nav{display:flex;flex-direction:row;overflow-x:auto}.staff-sidebar nav a{white-space:nowrap}.cashier-workspace{padding:10px}#pos .cashier-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#pos #menu nav{grid-template-columns:repeat(2,minmax(0,1fr))}.staff-search{width:100%}}
+
+/* Records pages occupy the entire area to the right of the sidebar.
+   Keep the two-column layout exclusively for the walk-in POS. */
+.cashier-workspace:has(> .cashier-records-page){
+  display:block !important;
+  width:100%;
+  min-width:0;
+  overflow-x:hidden;
+}
+.cashier-workspace > .cashier-records-page{
+  display:block;
+  width:100%;
+  max-width:none !important;
+  min-width:0;
+  margin:0;
+}
+.cashier-records-page .records-filters{width:100%;align-items:center}
+.cashier-records-page .records-table-card{width:100%;max-width:none;min-width:0}
+.cashier-records-page .records-table-card table{width:100%;min-width:780px;border-collapse:collapse}
+.cashier-records-page .records-table-card th,
+.cashier-records-page .records-table-card td{padding:15px 18px;text-align:left}
+.cashier-records-page .records-table-card tbody tr{border-top:1px solid #edf0f3}
+.cashier-records-page .records-table-card tbody tr:hover{background:#fafbfc}
+.cashier-records-page .records-summary-grid{width:100%;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:900px){.cashier-records-page .records-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.cashier-records-page .records-summary-grid{grid-template-columns:1fr}}
